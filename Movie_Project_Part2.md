@@ -1,66 +1,53 @@
----
-title: "Oscars Award Predictions Part2"
-output: 
-  html_document:
-    keep_md: TRUE
----
-  
-  Continuing from the Python script output, this is the visualizaiton/modeling part of the project.
+Oscars Award Predictions Part2
+================
 
+Continuing from the Python script output, this is the visualizaiton/modeling part of the project.
 
-```r
+``` r
 #import final dataset from python script
 academy = read.csv("C:\\Users\\Patrick\\Documents\\academy_final_dataset.csv")
 library(ggplot2)
 library(dplyr)
 ```
 
-```
-## 
-## Attaching package: 'dplyr'
-```
+    ## 
+    ## Attaching package: 'dplyr'
 
-```
-## The following objects are masked from 'package:stats':
-## 
-##     filter, lag
-```
+    ## The following objects are masked from 'package:stats':
+    ## 
+    ##     filter, lag
 
-```
-## The following objects are masked from 'package:base':
-## 
-##     intersect, setdiff, setequal, union
-```
+    ## The following objects are masked from 'package:base':
+    ## 
+    ##     intersect, setdiff, setequal, union
 
-```r
+``` r
 library(tidyr)
 library(stringr)
 ```
-Here I'm creating  genre dataframe to look at academy winners by genres (by count and percentages) and plot the corrensponding barplot
 
+Here I'm creating genre dataframe to look at academy winners by genres (by count and percentages) and plot the corrensponding barplot
 
-```r
+``` r
 #create genre dataframe to look at academy winners by genres (by count and percentages) and plot the corrensponding barplot.
 genres=select(filter(academy,winner == 1),contains("Genre"))
 genres=genres %>% rename_at(vars(starts_with("Genre_")),funs(str_replace(.,"Genre_","")))
 ```
 
-```
-## Warning: funs() is soft deprecated as of dplyr 0.8.0
-## Please use a list of either functions or lambdas: 
-## 
-##   # Simple named list: 
-##   list(mean = mean, median = median)
-## 
-##   # Auto named with `tibble::lst()`: 
-##   tibble::lst(mean, median)
-## 
-##   # Using lambdas
-##   list(~ mean(., trim = .2), ~ median(., na.rm = TRUE))
-## This warning is displayed once per session.
-```
+    ## Warning: funs() is soft deprecated as of dplyr 0.8.0
+    ## Please use a list of either functions or lambdas: 
+    ## 
+    ##   # Simple named list: 
+    ##   list(mean = mean, median = median)
+    ## 
+    ##   # Auto named with `tibble::lst()`: 
+    ##   tibble::lst(mean, median)
+    ## 
+    ##   # Using lambdas
+    ##   list(~ mean(., trim = .2), ~ median(., na.rm = TRUE))
+    ## This warning is displayed once per session.
 
-```r
+``` r
 genres = data.frame(colname=names(genres),counts = colSums(genres))
 genres_all=select(academy,contains("Genre"))
 genres_all=genres_all %>% rename_at(vars(starts_with("Genre_")),funs(str_replace(.,"Genre_","")))
@@ -95,9 +82,9 @@ ylim(0,110)+
 coord_flip()
 ```
 
-![](Movie_Project_Part2_files/figure-html/unnamed-chunk-2-1.png)<!-- -->
+![](Movie_Project_Part2_files/figure-markdown_github/unnamed-chunk-2-1.png)
 
-```r
+``` r
 ggplot(genres_all, aes(x=reorder(colname,percentage),y=percentage*100,label=round(percentage,2)*100))+
 geom_point(stat="identity",fill="orange",size=11,color="tomato4")+
 geom_segment(aes(y=0,
@@ -122,14 +109,11 @@ ylim(0,100)+
 coord_flip()
 ```
 
-![](Movie_Project_Part2_files/figure-html/unnamed-chunk-2-2.png)<!-- -->
-I found the above plots interesting because they give a sense of what type of movies are winning these awards. The first plot gives a raw count of winners by genre. Drama is the overwhelmingly majority winner, which I believe intuitively makes sense. Drama as a genre is fairly ambiguous and can probably be considered a sub-genre within most movie types. What I believe is more interesting is that in the three categories we are predicting on, movies in Animation and Horror have not won once! The second plot is also interesting as it describes when nominated what percentage of the time that genre is winning. Given the large counts of war movies that have been nominated as well as the fact that they win nearly a third of the time when they are nominated, war movies always seem to be a safe bet to be taken seriously at the Academy Awards. 
+![](Movie_Project_Part2_files/figure-markdown_github/unnamed-chunk-2-2.png) I found the above plots interesting because they give a sense of what type of movies are winning these awards. The first plot gives a raw count of winners by genre. Drama is the overwhelmingly majority winner, which I believe intuitively makes sense. Drama as a genre is fairly ambiguous and can probably be considered a sub-genre within most movie types. What I believe is more interesting is that in the three categories we are predicting on, movies in Animation and Horror have not won once! The second plot is also interesting as it describes when nominated what percentage of the time that genre is winning. Given the large counts of war movies that have been nominated as well as the fact that they win nearly a third of the time when they are nominated, war movies always seem to be a safe bet to be taken seriously at the Academy Awards.
 
-Similar to ploting by genre I'm doing the same for cast, direction, producer, production company,
-and cinematographer.
+Similar to ploting by genre I'm doing the same for cast, direction, producer, production company, and cinematographer.
 
-
-```r
+``` r
 cast=select(filter(academy,winner == 1),contains("Cast"))
 cast=cast %>% rename_at(vars(starts_with("Cast_")),funs(str_replace(.,"Cast_","")))
 cast = data.frame(colname=names(cast),counts = colSums(cast))
@@ -159,9 +143,9 @@ ggplot(cast, aes(x=reorder(colname,counts),y=counts,label=counts))+
   coord_flip()
 ```
 
-![](Movie_Project_Part2_files/figure-html/unnamed-chunk-3-1.png)<!-- -->
+![](Movie_Project_Part2_files/figure-markdown_github/unnamed-chunk-3-1.png)
 
-```r
+``` r
 director=select(filter(academy,winner == 1),contains("Director"))
 director=director %>% rename_at(vars(starts_with("Director_")),funs(str_replace(.,"Director_","")))
 director = data.frame(colname=names(director),counts = colSums(director))
@@ -191,9 +175,9 @@ ggplot(director, aes(x=reorder(colname,counts),y=counts,label=counts))+
   coord_flip()
 ```
 
-![](Movie_Project_Part2_files/figure-html/unnamed-chunk-3-2.png)<!-- -->
+![](Movie_Project_Part2_files/figure-markdown_github/unnamed-chunk-3-2.png)
 
-```r
+``` r
 cinematographer=select(filter(academy,winner == 1),contains("Cinematographer"))
 cinematographer=cinematographer %>% rename_at(vars(starts_with("Cinematographer_")),funs(str_replace(.,"Cinematographer_","")))
 cinematographer = data.frame(colname=names(cinematographer),counts = colSums(cinematographer))
@@ -223,9 +207,9 @@ ggplot(cinematographer, aes(x=reorder(colname,counts),y=counts,label=counts))+
   coord_flip()
 ```
 
-![](Movie_Project_Part2_files/figure-html/unnamed-chunk-3-3.png)<!-- -->
+![](Movie_Project_Part2_files/figure-markdown_github/unnamed-chunk-3-3.png)
 
-```r
+``` r
 #by producer
 producer=select(filter(academy,winner == 1),contains("producer"))
 producer=producer %>% rename_at(vars(starts_with("Producer_")),funs(str_replace(.,"Producer_","")))
@@ -256,9 +240,9 @@ ggplot(producer, aes(x=reorder(colname,counts),y=counts,label=counts))+
   coord_flip()
 ```
 
-![](Movie_Project_Part2_files/figure-html/unnamed-chunk-3-4.png)<!-- -->
+![](Movie_Project_Part2_files/figure-markdown_github/unnamed-chunk-3-4.png)
 
-```r
+``` r
 #by production_company
 production_company=select(filter(academy,winner == 1),contains("Production_Company"))
 production_company=production_company %>% rename_at(vars(starts_with("Production_Company_")),funs(str_replace(.,"Production_Company_","")))
@@ -289,15 +273,13 @@ ggplot(production_company, aes(x=reorder(colname,counts),y=counts,label=counts))
   coord_flip()
 ```
 
-![](Movie_Project_Part2_files/figure-html/unnamed-chunk-3-5.png)<!-- -->
+![](Movie_Project_Part2_files/figure-markdown_github/unnamed-chunk-3-5.png)
 
 Next I did a plot of nominations by MPAA rating separted by winners and non-winners.
 
-
 This plot shows that overwhelmingly movies rated R, are nominated and end up winning Academy Awards. At first glance I found this surprising, my guess from a marketing standpoint was that a PG-13 rating would strike the perfect balance of widespread consumption, but still being able to display moderately mature themes that these awards garner. Further research I found, showed that since the MPAA Rating system came into existence that overwhelmingly most movies are rated R(58%) . This could very well help explain this chart.
 
-
-```r
+``` r
 academy1 = read.csv("C:\\Users\\Patrick\\Documents\\academy_dataset.csv")
 academy1=academy1 %>% 
   mutate(Critics_Average_Score= ifelse(is.na(Critics_Average_Score), mean(Critics_Average_Score,na.rm=TRUE),Critics_Average_Score))
@@ -312,12 +294,11 @@ ggplot(academy1,aes(x=MPAA_Rating,fill=as.factor(winner))) + theme_bw() +
        fill = "Did Nomination Win?")
 ```
 
-![](Movie_Project_Part2_files/figure-html/unnamed-chunk-4-1.png)<!-- -->
+![](Movie_Project_Part2_files/figure-markdown_github/unnamed-chunk-4-1.png)
 
 I created a scatterplot of Budget vs. Revenue and given the results I decided to log transform both variables going forward to account for the wide spread of values.
 
-
-```r
+``` r
 bud_rev= select(academy,Title,Budget,Revenue,winner)
 bud_rev = distinct(bud_rev)
 options(scipen=999)
@@ -333,12 +314,11 @@ ggplot(bud_rev, aes(x=Budget,y=Revenue,color=as.factor(winner)))+
   theme_bw()
 ```
 
-![](Movie_Project_Part2_files/figure-html/unnamed-chunk-5-1.png)<!-- -->
+![](Movie_Project_Part2_files/figure-markdown_github/unnamed-chunk-5-1.png)
 
 Next I created some density plots split by winners and non-winners to see if there are some interesting splits.
 
-
-```r
+``` r
 #density plot of budget separated by winners and non-winners
 academy1$Budget = academy1$Budget+1
 academy1$Budget_log=log(academy1$Budget)
@@ -355,9 +335,9 @@ ggplot(academy1, aes(x=Budget_log,fill=as.factor(winner)))+
        fill = "Did Nomination Win?")
 ```
 
-![](Movie_Project_Part2_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
+![](Movie_Project_Part2_files/figure-markdown_github/unnamed-chunk-6-1.png)
 
-```r
+``` r
 #density plot of runtime separated by winners and non-winners
 ggplot(academy1, aes(x=Runtime,fill=as.factor(winner)))+
   theme_bw()+
@@ -371,9 +351,9 @@ ggplot(academy1, aes(x=Runtime,fill=as.factor(winner)))+
        fill = "Did Nomination Win?")
 ```
 
-![](Movie_Project_Part2_files/figure-html/unnamed-chunk-6-2.png)<!-- -->
+![](Movie_Project_Part2_files/figure-markdown_github/unnamed-chunk-6-2.png)
 
-```r
+``` r
 #density plot of revenue separated by winners and non-winners
 academy1$Revenue = academy1$Revenue+1
 academy1$Revenue_log=log(academy1$Revenue)
@@ -389,9 +369,9 @@ ggplot(academy1, aes(x=Revenue_log,fill=as.factor(winner)))+
        fill = "Did Nomination Win?")
 ```
 
-![](Movie_Project_Part2_files/figure-html/unnamed-chunk-6-3.png)<!-- -->
+![](Movie_Project_Part2_files/figure-markdown_github/unnamed-chunk-6-3.png)
 
-```r
+``` r
 #density plot of review scores separated by winners and non-winners
 ggplot(academy1, aes(x=Critics_Average_Score,fill=as.factor(winner)))+
   theme_bw()+
@@ -405,9 +385,9 @@ ggplot(academy1, aes(x=Critics_Average_Score,fill=as.factor(winner)))+
        fill = "Did Nomination Win?")
 ```
 
-![](Movie_Project_Part2_files/figure-html/unnamed-chunk-6-4.png)<!-- -->
+![](Movie_Project_Part2_files/figure-markdown_github/unnamed-chunk-6-4.png)
 
-```r
+``` r
 #density plot of winners separated by revenue
 academy1=academy1 %>% arrange(year,category,Release_date) %>% group_by(year,category) %>% 
   mutate(rank = rank(Release_date))
@@ -427,12 +407,9 @@ ggplot(academy1, aes(x=rank,fill=as.factor(winner)))+
        fill = "Did Nomination Win?")
 ```
 
-![](Movie_Project_Part2_files/figure-html/unnamed-chunk-6-5.png)<!-- -->
-Seems like for runtime, budget, and revenue, the more/longer the more likely that movie is, to win an Oscar nomination.
-Further delving into runtime I created a boxplot of runtimes by genres. It shows that movies that never win(Horror and Animation) are average a lot shorter than movies that when nominated win often (Westerns).
+![](Movie_Project_Part2_files/figure-markdown_github/unnamed-chunk-6-5.png) Seems like for runtime, budget, and revenue, the more/longer the more likely that movie is, to win an Oscar nomination. Further delving into runtime I created a boxplot of runtimes by genres. It shows that movies that never win(Horror and Animation) are average a lot shorter than movies that when nominated win often (Westerns).
 
-
-```r
+``` r
 #boxplot of runtimes by genre
 rev = read.csv('C:\\Users\\Patrick\\Documents\\Revenue_Academy.csv')
 rev$Revenue = rev$Revenue+1
@@ -454,34 +431,25 @@ ggplot(rev, aes(x=Genre1,y=Runtime,fill=type,alpha=type))+
   )
 ```
 
-```
-## Warning: Using alpha for a discrete variable is not advised.
-```
+    ## Warning: Using alpha for a discrete variable is not advised.
 
-![](Movie_Project_Part2_files/figure-html/unnamed-chunk-7-1.png)<!-- -->
+![](Movie_Project_Part2_files/figure-markdown_github/unnamed-chunk-7-1.png)
 
-Last step was creating models to see if they could accurately predict Academy Award Winners. 
-I first started with an xgboost algorithm which I used cross validation to tune the hyperparameters. 
-I believe the correct way would be to make three models for each category, however the algorithm performed better as a single model (lack of data), so for the time being I kept it as is.
+Last step was creating models to see if they could accurately predict Academy Award Winners. I first started with an xgboost algorithm which I used cross validation to tune the hyperparameters. I believe the correct way would be to make three models for each category, however the algorithm performed better as a single model (lack of data), so for the time being I kept it as is.
 
-
-```r
+``` r
 #xgboost algorithm to train and test model
 library(xgboost)
 ```
 
-```
-## 
-## Attaching package: 'xgboost'
-```
+    ## 
+    ## Attaching package: 'xgboost'
 
-```
-## The following object is masked from 'package:dplyr':
-## 
-##     slice
-```
+    ## The following object is masked from 'package:dplyr':
+    ## 
+    ##     slice
 
-```r
+``` r
 academy = read.csv("C:\\Users\\Patrick\\Documents\\academy040420.csv")
 #transform revenue and budget into logs because of outliers.
 academy$Revenue = academy$Revenue+1
@@ -516,21 +484,19 @@ xgbcv = xgboost(data=dtrain,nround=300,max_depth=20,eta=.01,
                 gamma=0,verbose=0)
 ```
 
-```
-## Warning in xgb.train(params, dtrain, nrounds, watchlist, verbose = verbose, :
-## xgb.train: `seed` is ignored in R package. Use `set.seed()` instead.
-```
+    ## Warning in xgb.train(params, dtrain, nrounds, watchlist, verbose = verbose, :
+    ## xgb.train: `seed` is ignored in R package. Use `set.seed()` instead.
 
-```r
+``` r
 pred=predict(xgbcv,picture_test)
 
 #plot of feature importance
 xgb.ggplot.importance(xgb.importance(as.character(names),model=xgbcv),top_n=10)
 ```
 
-![](Movie_Project_Part2_files/figure-html/unnamed-chunk-8-1.png)<!-- -->
+![](Movie_Project_Part2_files/figure-markdown_github/unnamed-chunk-8-1.png)
 
-```r
+``` r
 #read in dataframe so we can align names with predictions to measure accuracy
 academy = read.csv("C:\\Users\\Patrick\\Documents\\academy040420.csv")
 academy$Revenue = academy$Revenue+1
@@ -562,29 +528,23 @@ library(grid)
 library(gridExtra)
 ```
 
-```
-## 
-## Attaching package: 'gridExtra'
-```
+    ## 
+    ## Attaching package: 'gridExtra'
 
-```
-## The following object is masked from 'package:dplyr':
-## 
-##     combine
-```
+    ## The following object is masked from 'package:dplyr':
+    ## 
+    ##     combine
 
-```r
+``` r
 plot.new()
 f=tableGrob(final,theme=ttheme_default(base_size=10))
 grid.draw(f)
 ```
 
-![](Movie_Project_Part2_files/figure-html/unnamed-chunk-8-2.png)<!-- -->
+![](Movie_Project_Part2_files/figure-markdown_github/unnamed-chunk-8-2.png)
 
+The model ended up predicting 8/15 movies correctly. This might not seem substansial, however that is 8/15 where each category could have 5 and potentially up to 9 different contestants. For reference, someone being able to randomly guess more than 6 out of 15 correctly is less than 1%. Also from the feature importance chart we can see that Runtime, Budget, Revenue, and Date\_Rank are huge indicators of winners. This aligns a lot with what the density plots earlier showed.
 
-The model ended up predicting 8/15 movies correctly. This might not seem substansial, however that is 8/15 where each category could have 5 and potentially up to 9 different contestants. For reference, someone being able to randomly guess more than 6 out of 15 correctly is less than 1%. Also from the feature importance chart we can see that Runtime, Budget, Revenue, and Date_Rank are huge indicators of winners. This aligns a lot with what the density plots earlier showed.
-
-While the model did great in predicting 2015, 2016, and 2017 winners it were terrible in predicting winners in 2018 and 2019. I’m curious whether this is a fault in the models or a shifting in paradigm of those assigned to vote for these movies. By most historical metrics 1917 (a war movie released in late 2019) should have won more awards, however Parasite was actually the big winner, the first South Korean film in history to win an Oscar and a movie that was released in mid-summer. Nowhere near award season. The Academy Awards have been under a lot scrutiny lately due to claimed lack of diversity in their selections of nominees and winners. Could this have an influence on recent winners such as Green Book, Roma, and Parasite? Perhaps, if this becomes a repeated pattern, maybe the models will select new important variables to predict future Oscar winners. 
-
+While the model did great in predicting 2015, 2016, and 2017 winners it were terrible in predicting winners in 2018 and 2019. I’m curious whether this is a fault in the models or a shifting in paradigm of those assigned to vote for these movies. By most historical metrics 1917 (a war movie released in late 2019) should have won more awards, however Parasite was actually the big winner, the first South Korean film in history to win an Oscar and a movie that was released in mid-summer. Nowhere near award season. The Academy Awards have been under a lot scrutiny lately due to claimed lack of diversity in their selections of nominees and winners. Could this have an influence on recent winners such as Green Book, Roma, and Parasite? Perhaps, if this becomes a repeated pattern, maybe the models will select new important variables to predict future Oscar winners.
 
 In future iterations I want to try some natural language processing on the synopsis of the movies, some additional features regarding the cast involved, and the PCA to account for overwhelming amount of columns relative to the rows.

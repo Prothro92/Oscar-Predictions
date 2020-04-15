@@ -1,8 +1,6 @@
 ---
 title: "Oscars Award Predictions Part2"
-output: 
-  html_document:
-    keep_md: TRUE
+output: rmarkdown::github_document
 ---
   
   Continuing from the Python script output, this is the visualizaiton/modeling part of the project.
